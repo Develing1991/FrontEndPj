@@ -1,20 +1,17 @@
 <template>
    <div style="overflow-x:auto;">
+       <div class="middle-style">
+           <input type="text" class="search-input-style">
+           <b-button class="btn-style">조회</b-button>
+           <b-button variant="success" class="btn-style">등록</b-button>
+       </div>
        <table class="container">
-            <!-- <colgroup>
-                <col style="width:100px;"/>
-                <col style="width:100px;"/>
-                <col style="width:100px;"/>
-                <col style="width:100px;"/>
-                <col style="width:100px;"/>
-                <col style="width:100px;"/>
-                <col style="width:100px;"/>
-            </colgroup> -->
             <thead>
                 <th class="cth">
-                    <input type="checkbox" @click="selectItemAll()">
+                    <i class="cehckBtn far fa-check-square" :class="{cehckBtnComp:selectChkAll}" @click="selectItemAll()"></i>
+                    <!-- <input type="checkbox" @click="selectItemAll()"> -->
                 </th>
-                <th class="cth">유틸</th>
+                <th class="cth" style="width:140px">유틸</th>
                 <th class="cth">아이디</th>
                 <th class="cth">이름</th>
                 <th class="cth">로그인 아이디</th>
@@ -25,17 +22,14 @@
             </thead>
             <tbody>
                 <tr v-for="item in users" :key="item.id" class="ctr">
-                    <td class="ctd">
-                        <input type="checkbox" @click="selectItem(item)" :checked="item.checked">
+                    <td>
+                        <i class="cehckBtn far fa-check-square" style="padding-left: 5px;" 
+                        :class="{cehckBtnComp:item.checked}" @click="selectItem(item)"></i>
                     </td>
-                    <b-icon-search style="padding:12px;" @click="itemDetail(item.id,0)"></b-icon-search>
-                    <!-- <b-icon-search style="padding:12px;" @click="itemDetail(item.id,0)">
-                        <router-link :to="`/userInfo/${item.id}`"></router-link>
-                    </b-icon-search> -->
-                    <b-icon-pen style="padding:12px;" @click="itemDetail(item.id,1)"></b-icon-pen>
-                    <b-icon-trash style="padding:12px;"></b-icon-trash>
+                    <b-icon-search class="table-icon-style" @click="itemDetail(item.id)"></b-icon-search>
+                    
+                    <b-icon-trash class="table-icon-style"></b-icon-trash>
                     <td class="ctd">{{item.id}}</td>
-                    <!-- <td class="ctd">{{item.checked}}</td> -->
                     <td class="ctd">{{item.name}}</td>
                     <td class="ctd">{{item.userLoginId}}</td>
                     <td class="ctd">{{item.address.city}}</td>
@@ -47,9 +41,9 @@
         </table>
         <!-- {{selectItems}} -->
         <!-- use the modal component, pass in the prop -->
-        <!-- <UserModal v-if="showDetail" @close="showDetail = false" :modalGbn="this.modalGbn">
+        <UserModal v-if="showDetail" @close="showDetail = false" @updateFetch="fetchUserList">
             <h3 slot="header">회원정보</h3>
-        </UserModal> -->
+        </UserModal>
         <!-- <UserInfo :viewsGbn="this.viewsGbn"></UserInfo> -->
         
    </div>
@@ -58,7 +52,7 @@
 
 <script>
 import {mapActions, mapState} from 'vuex';
-//import UserModal from '@/components/common/UserModal';
+import UserModal from '@/components/common/UserModal';
 import UserInfo from '@/components/user/UserInfo';
 
 export default {
@@ -66,14 +60,12 @@ export default {
         return{
             selectItems:[],
             selectChkAll:false,
-            //showDetail:false,
-            viewsGbn:0,
-            //modalGbn:0,
+            showDetail:false,
         }
     },
     components:{
         UserInfo,
-        //UserModal,
+        UserModal,
     },
     computed:{
         ...mapState({
@@ -109,10 +101,14 @@ export default {
             this.selectItems = targetList;
         },
         //상세
-        itemDetail(id,gbn){  
-            this.viewsGbn = gbn;
-            //this.showDetail = true;
-            this.$router.push(`/userInfo/${id}`);
+        async itemDetail(id){  
+            await this.$store.dispatch('us/FETCH_USER_INFO',id);
+            this.showDetail = true;
+            //this.$router.push(`/userInfo/${id}`);
+            
+        },
+        async fetchUserList(){
+            await this.$store.dispatch('us/FETCH_USER_LIST');
         }
         // ...mapActions([
         //     'FETCH_USER_LIST',
@@ -127,16 +123,48 @@ export default {
 
 }
 </script>
-<style>
-    .container {
+<style scoped>
+.container {
     border-collapse: collapse;
     width: 100%;
-    }
+}
 
-    .cth, .ctd {
+.cth, .ctd {
     text-align: left;
     padding: 8px;
-    }
+    height: 60px;
+}
 
-    .ctr:nth-child(even) {background-color: #f2f2f2;}
+.ctr:nth-child(even) {background-color: #f2f2f2;}
+.btn-style{
+    margin: 0px 5px 5px 5px;
+}
+.middle-style{
+    padding-left: 1200px;
+}
+.table-icon-style{
+    padding: 22px 12px 0px 12px;
+}
+.search-input-style{
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.cehckBtn{
+    line-height: 45px;
+    color: #b3adad;
+    margin-right: 5px;
+    font-size: 25px;
+}
+.cehckBtnComp{
+    color: #62acde;
+}
 </style>
