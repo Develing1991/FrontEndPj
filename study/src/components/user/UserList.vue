@@ -1,9 +1,9 @@
 <template>
    <div style="overflow-x:auto;">
        <div class="middle-style">
-           <input type="text" class="search-input-style">
-           <b-button class="btn-style">조회</b-button>
-           <b-button variant="success" class="btn-style">등록</b-button>
+           <input type="text" class="search-input-style" v-model="searchKewoard">
+           <b-button class="btn-style" @click="fetchUserList">조회</b-button>
+           <b-button variant="success" class="btn-style" @click="createUser">등록</b-button>
        </div>
        <table class="container">
             <thead>
@@ -39,6 +39,15 @@
                 </tr>
             </tbody>
         </table>
+        <br>
+        <div class="pagination">
+            <a @click="prevList">&laquo;</a>
+            <a v-for="(item,index) in pagingData.totalPages" :key="index"
+                @click="fetchUserList(index)"
+                >{{index + 1 }}</a>
+            <!-- <a class="active" href="#">2</a> -->
+            <a @click="nextList">&raquo;</a>
+        </div>
         <!-- use the modal component, pass in the prop -->
         <UserModal v-if="showDetail" @close="showDetail = false" @updateFetch="fetchUserList">
             <h3 slot="header">회원정보</h3>
@@ -60,6 +69,9 @@ export default {
             selectItems:[],
             selectChkAll:false,
             showDetail:false,
+            searchKewoard:'',
+            pageNum:0,
+            pageSize:10,
         }
     },
     components:{
@@ -69,6 +81,7 @@ export default {
     computed:{
         ...mapState({
             users : state => state.us.userList,
+            pagingData : state => state.us.pagingData,
         })
     },
     methods: {
@@ -106,18 +119,50 @@ export default {
             //this.$router.push(`/userInfo/${id}`);
             
         },
-        async fetchUserList(){
-            await this.$store.dispatch('us/FETCH_USER_LIST');
+        // async fetchUserPagingList(){
+        //     var data = this.getPageSet();
+        //     var response = await this.$store.dispatch('us/FETCH_USER_LIST',data);
+        //     return response;
+        // },
+        async fetchUserList(index){
+            var data = this.getPageSet();
+            if(this.searchKewoard != ''){ //현재 이름으로만..
+                data.name = this.searchKewoard;
+            }
+            if(typeof(index) == "number"){
+                //data.page = index;
+                this.pageNum = index;
+                data.page = this.pageNum;
+            }
+            await this.$store.dispatch('us/FETCH_USER_LIST',data);
+        },
+        prevList(){
+            if(0 == this.pageNum){
+                return;
+            }
+            this.pageNum -= 1;
+            this.fetchUserList(this.pageNum);
+        },
+        nextList(){
+            if(this.pagingData.totalPages -1 == this.pageNum){
+                return;
+            }
+            this.pageNum += 1;
+            this.fetchUserList(this.pageNum);
+        },
+        createUser(){
+
+        },
+        getPageSet(){
+            var data = {
+                page : this.pageNum,
+                size : this.pageSize,
+            }
+            return data;
         }
-        // ...mapActions([
-        //     'FETCH_USER_LIST',
-        // ]),
     },
     mounted () {
-        //this.FETCH_USER_LIST1();
-        this.$store.dispatch('us/FETCH_USER_LIST');
-        
-        //this.$store.dispatch('FETCH_USER_LIST');
+        this.fetchUserList();
     },
 
 }
@@ -142,7 +187,7 @@ export default {
     padding-left: 1200px;
 }
 .table-icon-style{
-    padding: 22px 12px 0px 12px;
+    margin: 22px 12px 0px 12px;
 }
 .search-input-style{
     height: calc(1.5em + 0.75rem + 2px);
@@ -165,5 +210,36 @@ export default {
 }
 .cehckBtnComp{
     color: #62acde;
+}
+
+.pagination {
+  padding-left:830px;
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination a:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.pagination a:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 </style>

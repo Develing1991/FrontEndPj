@@ -7,8 +7,8 @@ const instance = axios.create({
 /**
  * 유저 
  */
-function fetchUserList(){
-    return instance.get('/user');
+function fetchUserList(data){ 
+    return instance.post(`/userlist?page=${data.page}&size=${data.size}`,data);
 }
 function fetchUserInfo(id){
     return instance.get(`/user/${id}`);
