@@ -39,7 +39,6 @@
                 </tr>
             </tbody>
         </table>
-        <!-- {{selectItems}} -->
         <!-- use the modal component, pass in the prop -->
         <UserModal v-if="showDetail" @close="showDetail = false" @updateFetch="fetchUserList">
             <h3 slot="header">회원정보</h3>
