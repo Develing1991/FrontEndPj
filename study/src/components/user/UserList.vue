@@ -28,12 +28,17 @@
                     </td>
                     <b-icon-search class="table-icon-style" @click="itemDetail(item.id)"></b-icon-search>
                     
-                    <b-icon-trash class="table-icon-style"></b-icon-trash>
+                    <b-icon-trash class="table-icon-style" @click="itemDelete(item)"></b-icon-trash>
                     <td class="ctd">{{item.id}}</td>
                     <td class="ctd">{{item.name}}</td>
                     <td class="ctd">{{item.userLoginId}}</td>
                     <td class="ctd">{{item.address.city}}</td>
-                    <td class="ctd">{{item.deletedYn}}</td>
+                    <td class="ctd" v-if="item.deletedYn == 'Y'">
+                        <b-button pill variant="outline-danger">삭제됨</b-button>
+                    </td>
+                    <td class="ctd" v-else>
+                        <b-button pill variant="success">사용중</b-button>
+                    </td>
                     <td class="ctd">{{item.createdDate}}</td>
                     <td class="ctd">{{item.lastModifiedDate}}</td>
                 </tr>
@@ -118,6 +123,15 @@ export default {
                 });
             }
             this.selectItems = targetList;
+        },
+        //삭제
+        async itemDelete(item){
+            if(item.deletedYn == 'N'){
+                if(confirm(`${item.userLoginId} 사용자를 삭제하시겠습니까?`)){
+                    await this.$store.dispatch('us/FETCH_USER_DELETE',item.id);
+                    this.fetchUpdateList();
+                }
+            }
         },
         //상세
         async itemDetail(id){  

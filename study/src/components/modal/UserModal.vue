@@ -230,6 +230,7 @@ export default {
               "name":this.basicUser.name,
               "pass1":this.pass1,
               "pass2":this.pass2,
+              "deleteYn":this.basicUser.deleteYn,
               "city":this.basicUserAddr.city,
               "street":this.basicUserAddr.street,
               "zipcode":this.basicUserAddr.zipcode,
