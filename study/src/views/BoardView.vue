@@ -1,5 +1,8 @@
 <template>
-  <BoardList></BoardList>
+  <div>
+    <h1>게시판 관리</h1>
+    <BoardList></BoardList>
+  </div>
 </template>
 
 <script>

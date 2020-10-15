@@ -45,14 +45,8 @@
             </tbody>
         </table>
         <br>
-        <div class="pagination">
-            <a @click="prevList">&laquo;</a>
-            <a v-for="(item,index) in pagingData.totalPages" :key="index"
-                @click="fetchUserList(index)"
-                >{{index + 1 }}</a>
-            <!-- <a class="active" href="#">2</a> -->
-            <a @click="nextList">&raquo;</a>
-        </div>
+        <!-- 페이지 네이션 -->
+        <Pagination :totalPages="pagingData.totalPages" :pageNum="pageNum" @paging="fetchUserList"/>
         <!-- use the modal component, pass in the prop -->
         <UserModal v-if="showDetail" @close="showDetail = false" @updateFetch="fetchUpdateList">
             <h3 slot="header">회원정보</h3>
@@ -72,7 +66,7 @@ import {mapActions, mapState} from 'vuex';
 import UserModal from '@/components/modal/UserModal';
 import UserCreate from '@/components/modal/UserCreate';
 import UserInfo from '@/components/user/UserInfo';
-
+import Pagination from '@/components/common/Pagination';
 export default {
     data() {
         return{
@@ -89,6 +83,7 @@ export default {
         UserInfo,
         UserModal,
         UserCreate,
+        Pagination,
     },
     computed:{
         ...mapState({
@@ -157,20 +152,6 @@ export default {
             }
             await this.$store.dispatch('us/FETCH_USER_LIST',data);
         },
-        prevList(){
-            if(0 == this.pageNum){
-                return;
-            }
-            this.pageNum -= 1;
-            this.fetchUserList(this.pageNum);
-        },
-        nextList(){
-            if(this.pagingData.totalPages -1 == this.pageNum){
-                return;
-            }
-            this.pageNum += 1;
-            this.fetchUserList(this.pageNum);
-        },
         createUser(){ 
             this.showCreate = true;
         },
@@ -232,7 +213,7 @@ export default {
 .cehckBtnComp{
     color: #62acde;
 }
-
+/* 
 .pagination {
   padding-left:830px;
   display: inline-block;
@@ -262,5 +243,5 @@ export default {
 .pagination a:last-child {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-}
+} */
 </style>
