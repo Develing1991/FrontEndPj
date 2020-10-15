@@ -39,8 +39,8 @@
                     <td class="ctd" v-else>
                         <b-button pill variant="success">사용중</b-button>
                     </td>
-                    <td class="ctd">{{item.createdDate}}</td>
-                    <td class="ctd">{{item.lastModifiedDate}}</td>
+                    <td class="ctd">{{item.createdDate | formatDate}}</td>
+                    <td class="ctd">{{item.lastModifiedDate | formatDate}}</td>
                 </tr>
             </tbody>
         </table>
