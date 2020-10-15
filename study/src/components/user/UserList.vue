@@ -1,7 +1,7 @@
 <template>
    <div style="overflow-x:auto;">
        <div class="middle-style">
-           <input type="text" class="search-input-style" v-model="searchKewoard">
+           <input type="text" class="search-input-style" v-model="searchKewoard" @keypress.enter="fetchUserList">
            <b-button class="btn-style" @click="fetchUserList">조회</b-button>
            <b-button variant="success" class="btn-style" @click="createUser">등록</b-button>
        </div>
@@ -49,9 +49,13 @@
             <a @click="nextList">&raquo;</a>
         </div>
         <!-- use the modal component, pass in the prop -->
-        <UserModal v-if="showDetail" @close="showDetail = false" @updateFetch="fetchUserList">
+        <UserModal v-if="showDetail" @close="showDetail = false" @updateFetch="fetchUpdateList">
             <h3 slot="header">회원정보</h3>
         </UserModal>
+
+        <UserCreate v-if="showCreate" @close="showCreate = false" @updateFetch="fetchUpdateList">
+            <h3 slot="header">회원등록</h3>
+        </UserCreate>
         <!-- <UserInfo :viewsGbn="this.viewsGbn"></UserInfo> -->
         
    </div>
@@ -60,7 +64,8 @@
 
 <script>
 import {mapActions, mapState} from 'vuex';
-import UserModal from '@/components/common/UserModal';
+import UserModal from '@/components/modal/UserModal';
+import UserCreate from '@/components/modal/UserCreate';
 import UserInfo from '@/components/user/UserInfo';
 
 export default {
@@ -69,6 +74,7 @@ export default {
             selectItems:[],
             selectChkAll:false,
             showDetail:false,
+            showCreate:false,
             searchKewoard:'',
             pageNum:0,
             pageSize:10,
@@ -77,6 +83,7 @@ export default {
     components:{
         UserInfo,
         UserModal,
+        UserCreate,
     },
     computed:{
         ...mapState({
@@ -119,11 +126,11 @@ export default {
             //this.$router.push(`/userInfo/${id}`);
             
         },
-        // async fetchUserPagingList(){
-        //     var data = this.getPageSet();
-        //     var response = await this.$store.dispatch('us/FETCH_USER_LIST',data);
-        //     return response;
-        // },
+        async fetchUpdateList(){
+            this.searchKewoard = ''
+            var data = this.getPageSet();
+            await this.$store.dispatch('us/FETCH_USER_LIST',data);
+        },
         async fetchUserList(index){
             var data = this.getPageSet();
             if(this.searchKewoard != ''){ //현재 이름으로만..
@@ -150,8 +157,8 @@ export default {
             this.pageNum += 1;
             this.fetchUserList(this.pageNum);
         },
-        createUser(){
-
+        createUser(){ 
+            this.showCreate = true;
         },
         getPageSet(){
             var data = {

@@ -1,6 +1,8 @@
 import {fetchUserList
+        ,fetchUserDuple
         ,fetchUserInfo
         ,fetchUserUpdate
+        ,fetchUserCreate
         ,fetchUserDelete} from '@/api/index';
 
 export default{
@@ -40,6 +42,17 @@ export default{
             commit('SET_USERLIST_PAGE',paging);
             return response;
         },
+        async FETCH_USER_DUPL({commit},data){
+            const response = await fetchUserDuple(data);
+            // commit('SET_USERLIST',response.data.content);
+            // var paging = {
+            //     "totalElements" : response.data.totalElements,
+            //     "totalPages" : response.data.totalPages,
+            // }
+            // commit('SET_USERLIST',response.data.content);
+            // commit('SET_USERLIST_PAGE',paging);
+            return response;
+        },
         async FETCH_USER_INFO({commit}, id){
             const response = await fetchUserInfo(id);
             commit('SET_USER_INFO',response.data);
@@ -47,6 +60,10 @@ export default{
         },
         async FETCH_USER_UPDATE({commit},data){
             const response = await fetchUserUpdate(data.id, data);
+            return response;
+        },
+        async FETCH_USER_CREATE({commit},data){
+            const response = await fetchUserCreate(data);
             return response;
         }
     }

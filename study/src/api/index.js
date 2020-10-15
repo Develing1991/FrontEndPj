@@ -10,8 +10,14 @@ const instance = axios.create({
 function fetchUserList(data){ 
     return instance.post(`/userlist?page=${data.page}&size=${data.size}`,data);
 }
+function fetchUserDuple(data){ //아이디 중복
+    return instance.post(`/userlist`,data);
+}
 function fetchUserInfo(id){
     return instance.get(`/user/${id}`);
+}
+function fetchUserCreate(data){
+    return instance.post(`/user`,data);
 }
 function fetchUserUpdate(id, updateData){
     delete updateData.id;
@@ -30,9 +36,13 @@ function fetchBoardInfo(id){
 
 export {
     fetchUserList,
+    fetchUserDuple,
     fetchUserInfo,
     fetchBoardList,
     fetchBoardInfo,
     fetchUserUpdate,
     fetchUserDelete,
+    fetchUserCreate,
+    
+    
 }
