@@ -1,6 +1,7 @@
 <template>
-   <div style="overflow-x:auto;">
-       <b-card no-body class="container">
+   
+   <div style="overflow-x:auto;" >
+       <b-card no-body class="container" >
             <b-tabs card>
                 <b-tab :title="item.name" v-for=" (item,index) in boardTypeList" :key="index" @click="serchBoardType(item.type)">
                     <b-card-text>
@@ -51,7 +52,6 @@
             </b-tabs>
         </b-card>
        
-       
         <br>
         <!-- 페이지 네이션 -->
         <Pagination :totalPages="pagingData.totalPages" :pageNum="pageNum" @paging="fetchBoardList"/>
@@ -63,7 +63,6 @@
         <BoardCreate v-if="showCreate" @close="showCreate = false" @updateFetch="fetchUpdateList">
             <h3 slot="header">게시글등록</h3>
         </BoardCreate>
-        
    </div>
    
 </template>
@@ -146,6 +145,7 @@ export default {
             this.fetchBoardList();
         },
         async fetchBoardList(index){
+            this.$emit('start');
             var data = this.getPageSet();
            
             data.type = this.boardType;
@@ -155,7 +155,9 @@ export default {
                 this.pageNum = index;
                 data.page = this.pageNum;
             }
+            
             await this.$store.dispatch('bs/FETCH_BOARD_LIST',data);
+            this.$emit('end');
         },
         getPageSet(){
             var data = {
@@ -168,24 +170,30 @@ export default {
         async itemDelete(item){
             if(item.deletedYn == 'N'){
                 if(confirm(`${item.userLoginId} 사용자를 삭제하시겠습니까?`)){
+                    this.$emit('start');
                     await this.$store.dispatch('us/FETCH_USER_DELETE',item.id);
                     this.fetchUpdateList();
+                    this.$emit('end');
                 }
             }
         },
         //상세
         async itemDetail(id){  
+            this.$emit('start');
             await this.$store.dispatch('bs/FETCH_BOARD_INFO',id);
+            this.$emit('end');
             this.showDetail = true;
             //this.$router.push(`/userInfo/${id}`);
             
         },
         async fetchUpdateList(bType){
+            this.$emit('start');
             this.searchKewoard = ''
             var data = this.getPageSet();
             data.type = bType;
             data.title = this.searchKewoard;
             await this.$store.dispatch('bs/FETCH_BOARD_LIST',data);
+            this.$emit('end');
         },
         fetchUpdateListTab(bType){
             var changeTab = document.getElementsByTagName('li');
@@ -205,12 +213,12 @@ export default {
                 case 'NOTICE':
                     document.getElementById(changeTab[4].getElementsByTagName('a')[0].id).click();
                 break;
-                //sdsfsd
             }
         }
     },
     mounted () {
         this.fetchBoardList();
+        
     },
 
 }
