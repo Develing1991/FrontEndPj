@@ -32,36 +32,59 @@ export default{
     },
     actions:{
         async FETCH_USER_LIST({commit},data){
-            const response = await fetchUserList(data);
-            commit('SET_USERLIST',response.data.content);
-            var paging = {
-                "totalElements" : response.data.totalElements,
-                "totalPages" : response.data.totalPages,
+            try {
+                const response = await fetchUserList(data);
+                var paging = {
+                    "totalElements" : response.data.totalElements,
+                    "totalPages" : response.data.totalPages,
+                }
+                commit('SET_USERLIST',response.data.content);
+                commit('SET_USERLIST_PAGE',paging);
+                return response;
+            } catch (error) {
+                console.log(error);
             }
-            commit('SET_USERLIST',response.data.content);
-            commit('SET_USERLIST_PAGE',paging);
-            return response;
         },
         async FETCH_USER_DUPL({commit},data){
-            const response = await fetchUserDuple(data);
-            return response;
+            try {
+                const response = await fetchUserDuple(data);
+                return response;   
+            } catch (error) {
+                console.log(error);
+            }
         },
         async FETCH_USER_INFO({commit}, id){
-            const response = await fetchUserInfo(id);
-            commit('SET_USER_INFO',response.data);
-            return response;
+            try {
+                const response = await fetchUserInfo(id);
+                commit('SET_USER_INFO',response.data);
+                return response;   
+            } catch (error) {
+                console.log(error);
+            }
         },
         async FETCH_USER_CREATE({commit},data){
-            const response = await fetchUserCreate(data);
-            return response;
+            try {
+                const response = await fetchUserCreate(data);
+                return response;   
+            } catch (error) {
+                console.log(error);
+            }
         },
         async FETCH_USER_UPDATE({commit},data){
-            const response = await fetchUserUpdate(data.id, data);
-            return response;
+            try {
+                const response = await fetchUserUpdate(data);
+                return response;   
+            } catch (error) {
+                console.log(error);
+            }
         },
         async FETCH_USER_DELETE({commit},id){
-            const response = await fetchUserDelete(id);
-            return response;
+            try {
+                const response = await fetchUserDelete(id);
+                return response;
+            } catch (error) {
+                console.log(error);
+            }
         },
     }
 }

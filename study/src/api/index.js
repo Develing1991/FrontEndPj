@@ -19,30 +19,44 @@ function fetchUserInfo(id){
 function fetchUserCreate(data){
     return instance.post(`/user`,data);
 }
-function fetchUserUpdate(id, updateData){
-    delete updateData.id;
-    return instance.post(`/user/${id}`, updateData);
+function fetchUserUpdate(data){
+    return instance.post(`/user/${data.id}`, data.updateData);
 }
 function fetchUserDelete(id){
     return instance.delete(`/user/${id}`);
 }
 
-function fetchBoardList(){
-    return instance.get('/board');
+/**
+ * 게시판
+ */
+function fetchBoardList(data){ //검색 다른방식으로
+    return instance.get(`/board/list/${data.type}?page=${data.page}&size=${data.size}&title=${data.title}`); 
 }
 function fetchBoardInfo(id){
     return instance.get(`/board/${id}`);
+}
+function fetchBoardCreate(data){
+    return instance.post('/board',data);
+}
+function fetchBoardUpdate(data){
+    return instance.post(`/board/${data.id}`,data.updateData);
+}
+function fetchBoardDelete(id){
+    return instance.delete(`/board/${id}`);
 }
 
 export {
     fetchUserList,
     fetchUserDuple,
     fetchUserInfo,
-    fetchBoardList,
-    fetchBoardInfo,
     fetchUserUpdate,
     fetchUserDelete,
     fetchUserCreate,
-    
+
+    fetchBoardList,
+    fetchBoardInfo,
+    fetchBoardCreate,
+    fetchBoardUpdate,
+    fetchBoardDelete,
     
 }

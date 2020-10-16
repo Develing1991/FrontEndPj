@@ -21,7 +21,7 @@
                 <th class="cth">수정일</th>
             </thead>
             <tbody>
-                <tr v-for="item in users" :key="item.id" class="ctr">
+                <tr v-for="item in list" :key="item.id" class="ctr">
                     <td>
                         <i class="cehckBtn far fa-check-square" style="padding-left: 5px;" 
                         :class="{cehckBtnComp:item.checked}" @click="selectItem(item)"></i>
@@ -77,6 +77,7 @@ export default {
             searchKewoard:'',
             pageNum:0,
             pageSize:10,
+            list : [],
         }
     },
     components:{
@@ -85,9 +86,14 @@ export default {
         UserCreate,
         Pagination,
     },
+    watch:{
+        userList(newValue){
+            this.list = newValue;
+        },
+    },
     computed:{
         ...mapState({
-            users : state => state.us.userList,
+            userList : state => state.us.userList,
             pagingData : state => state.us.pagingData,
         })
     },
@@ -96,7 +102,7 @@ export default {
         selectItem(item){
             item.checked = !item.checked;
             var targetList = [];
-            this.users.forEach(element => {
+            this.list.forEach(element => {
                 if(element.checked){
                     targetList.push(element.id);
                 }
@@ -108,16 +114,19 @@ export default {
             this.selectChkAll = !this.selectChkAll;
             var targetList = [];
             if(this.selectChkAll){
-                this.users.forEach(element => {
+                this.list.forEach(element => {
                     element.checked = true;
                     targetList.push(element.id);
                 });
             }else{
-                this.users.forEach(element => {
+                this.list.forEach(element => {
                     element.checked = false;
                 });
             }
             this.selectItems = targetList;
+        },
+        createUser(){ 
+            this.showCreate = true;
         },
         //삭제
         async itemDelete(item){
@@ -151,9 +160,6 @@ export default {
                 data.page = this.pageNum;
             }
             await this.$store.dispatch('us/FETCH_USER_LIST',data);
-        },
-        createUser(){ 
-            this.showCreate = true;
         },
         getPageSet(){
             var data = {

@@ -226,7 +226,8 @@ export default {
         }
         if(confirm(`${this.basicUser.userLoginId}님의 회원 정보를 수정하시겠습니까?`)){
            var data = {
-              "id":this.basicUser.id,
+            "id":this.basicUser.id,
+            updateData:{
               "name":this.basicUser.name,
               "pass1":this.pass1,
               "pass2":this.pass2,
@@ -234,6 +235,7 @@ export default {
               "city":this.basicUserAddr.city,
               "street":this.basicUserAddr.street,
               "zipcode":this.basicUserAddr.zipcode,
+            }
           }
           const response = await this.$store.dispatch('us/FETCH_USER_UPDATE',data);
           this.updatable = false;
