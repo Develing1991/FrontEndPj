@@ -5,6 +5,14 @@ const instance = axios.create({
 })
 
 /**
+ * 로그인 관련
+ */
+function fetchLogin(data){
+    return instance.post(`/login`,data);
+}
+
+
+/**
  * 유저 
  */
 function fetchUserList(data){ 
@@ -46,6 +54,8 @@ function fetchBoardDelete(id){
 }
 
 export {
+    fetchLogin,
+    
     fetchUserList,
     fetchUserDuple,
     fetchUserInfo,

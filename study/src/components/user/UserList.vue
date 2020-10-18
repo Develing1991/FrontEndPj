@@ -139,17 +139,20 @@ export default {
         },
         //상세
         async itemDetail(id){  
+            this.$emit('start');
             await this.$store.dispatch('us/FETCH_USER_INFO',id);
             this.showDetail = true;
-            //this.$router.push(`/userInfo/${id}`);
-            
+            this.$emit('end');
         },
         async fetchUpdateList(){
+            this.$emit('start');
             this.searchKewoard = ''
             var data = this.getPageSet();
             await this.$store.dispatch('us/FETCH_USER_LIST',data);
+            this.$emit('end');
         },
         async fetchUserList(index){
+            this.$emit('start');
             var data = this.getPageSet();
             if(this.searchKewoard != ''){ //현재 이름으로만..
                 data.name = this.searchKewoard;
@@ -160,6 +163,7 @@ export default {
                 data.page = this.pageNum;
             }
             await this.$store.dispatch('us/FETCH_USER_LIST',data);
+            this.$emit('end');
         },
         getPageSet(){
             var data = {

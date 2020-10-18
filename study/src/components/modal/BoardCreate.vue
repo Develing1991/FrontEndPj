@@ -3,48 +3,61 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div class="modal-header">
-            <slot name="header" >
+            <slot name="header">
               default header
             </slot>
             <span>
-              <b-button pill variant="info" @click="saveUser" >저장</b-button>
-              <b-button pill variant="secondary"  @click="$emit('close')" >닫기</b-button>
+              <b-button pill variant="success" @click="createBoard()" >등록</b-button>
+              <b-button pill variant="secondary" @click="$emit('close')">닫기</b-button>
             </span>
           </div>
 
           <div class="modal-body">
             <slot name="body" >
-              <!-- {{userInfo}} -->
-              <b-list-group >
+              <b-list-group>
                 <b-list-group-item href="#" class="flex-column align-items-start">
-                        <span><small id="tooltip-target-1">이름 </small>* :</span> <span class="validation-alert">{{validation.name}}</span>
-                        <b-list-group-item><input type="text" class="create-input" v-model="setName" ></b-list-group-item>
-                        <span><small>아이디 *</small> :</span> <span class="validation-alert">{{validation.userLoginId}}</span>
-                        <b-list-group-item>
-                            <input type="text" class="create-input" v-model="setUserId" @keypress="changeStatus">
-                            <b-button pill variant="success" style="margin-left:5px;" id="tooltip-button-1" @click="duplicateCheck">중복확인</b-button>
-                            <b-alert :show="!saveIdCheck" variant="info">아이디 중복 확인을 진행해 주세요.</b-alert>
-                            <b-alert :show="idYes" variant="primary">사용가능한 아이디 입니다.</b-alert>
-                            <b-alert :show="idNo" variant="danger">사용할 수 없는 아이디 입니다.</b-alert>
-                        </b-list-group-item>
-                        <span><small>비밀번호 *</small> :</span> <span class="validation-alert">
-                            {{validation.pass1}} <span :class="{ passCheck :matchPass ==='일치'}">({{matchPass}})</span>
-                        </span>
-                        <b-list-group-item><input type="text" class="create-input" v-model="setPass1" ></b-list-group-item>
-                        <span><small>비밀번호확인 *</small> :</span> <span class="validation-alert">
-                            {{validation.pass2}} <span :class="{ passCheck :matchPass ==='일치'}">({{matchPass}})</span>
-                        </span>
-                        <b-list-group-item><input type="text" class="create-input" v-model="setPass2" ></b-list-group-item>
-                        <br>
-                        <b-list-group-item>
-                        <div><small>도시</small> :</div>
-                        <input type="text" class="create-input" v-model="setCity" >
-                        <div><small>지역</small> :</div>
-                        <input type="text" class="create-input" v-model="setStreet" >
-                        <div><small>우편</small> :</div>
-                        <input type="text" class="create-input" v-model="setZipcode" >
+                      <br>
+                      <p class="mb-1" >
+                          <b-container class="bv-example-row">
+                            <b-row>
+                              <b-col><strong>제목</strong></b-col>
+                              <b-col><strong>게시판유형</strong></b-col>
+                            </b-row>
+                        </b-container>
+                      </p>
+                      <hr>
+                      <div>
+                        <p class="mb-1">
+                          <b-container class="bv-example-row">
+                            <b-row>
+                                <b-col><input type="text" class="create-input" v-model="title"></b-col>
+                                <b-col>
+                                     <b-form-select
+                                        v-model="boardType"
+                                        :options="options"
+                                        class="mb-3"
+                                        value-field="value"
+                                        text-field="name"
+                                     ></b-form-select>
+                                </b-col>
+                            </b-row>
+                          </b-container>
+                        </p>
+                      </div>
+                      <br>
+                      <b-list-group-item href="#" class="flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                Contents
+                            </div>
+                            <hr>
+                            <div style="width:100%; height:300px; overflow:auto">
+                                <p class="mb-1" >
+                                    <b-container class="bv-example-row">
+                                        <textarea v-model="contents"></textarea>
+                                    </b-container>
+                                </p>
+                            </div>
                         </b-list-group-item>
                 </b-list-group-item>
               </b-list-group>
@@ -69,106 +82,61 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-    watch:{
-      setPass1(newValue){
-        (this.setPass1 == '' || this.setPass2 == '') || this.setPass2 !== newValue ? this.matchPass ='불일치' : this.matchPass = '일치'
-      },
-      setPass2(newValue){
-        (this.setPass1 == '' || this.setPass2 == '') || this.setPass1 !== newValue ? this.matchPass = '불일치' : this.matchPass = '일치'
+    props:{
+      boardGbn:{
+        type: String,
+        required:true,
       }
+    },
+    watch:{
+        boardInfoSet(newValue){
+            this.boardInfoSet = newValue;
+        }
     },
     data() {
         return {
-            saveIdCheck: false,
-            idYes:false,
-            idNo:false,
-            setName : '',
-            setUserId : '',
-            setPass1 : '', 
-            setPass2 : '',
-            setCity : '',
-            setStreet : '',
-            setZipcode : '',
-            matchPass:'불일치',
-            validation:{
-                "name" :'',
-                "userLoginId" :'',
-                "pass1" :'',
-                "pass2" :'',
-            },
+            title:'',
+            contents:'',
+            boardType: this.boardGbn,
+
+            options: [
+                { value: 'FREE', name: '자유' },
+                { value: 'BOOK', name: '도서' },
+                { value: 'HEALTH', name: '건강'},
+                { value: 'COFFEE', name: '커피'},
+                { value: 'NOTICE', name: '공지'},
+            ]
         }
     },
     methods: {
-        saveUser() {
-            if(this.validationChk()){
-                if(this.saveIdCheck === true && this.idYes === true){
-                    var createData = {
-                    "name" : this.setName,
-                    "userLoginId" : this.setUserId,
-                    "pass1":this.setPass1,
-                    "pass2":this.setPass2,
-                    "city":this.setCity,
-                    "street":this.setStreet,
-                    "zipcode":this.setZipcode,
-                    }
-                    
-                    //등록
-                    this.$store.dispatch('us/FETCH_USER_CREATE',createData);
-                    alert('정상적으로 등록되었습니다.');
-                    this.$emit('updateFetch');
-                    this.$emit('close');   
-                }
+      async createBoard(){
+        if(confirm('해당 게시글을 등록하시겠습니까?')){
+            var data = {
+                "userId" : this.loginUser.userId,
+                "title" : this.title,
+                "contents":this.contents,
+                "boardType":this.boardType,
             }
-        },
-        validationChk(){
-            var chkBool = true;
-            if(this.setName == ''){
-                this.validation.name = '필수 값 입니다.';
-                chkBool = false
-            }else if(this.setUserId == ''){
-                this.validation.userLoginId = '필수 값 입니다.';
-                chkBool = false
-            }else if(this.setPass1 == ''){
-                this.validation.pass1 = '필수 값 입니다.';
-                chkBool = false
-            }else if(this.setPass2 == ''){
-                this.validation.pass2 = '필수 값 입니다.';
-                chkBool = false
-            }
-            return chkBool;
-        },
-        async duplicateCheck(){
-            if(this.setUserId == ''){
-                this.idNo = true;
-                return;
-            }
-             var data = {
-                userLoginId : this.setUserId, 
-            }
-            var response = await this.$store.dispatch('us/FETCH_USER_DUPL',data);
-            this.saveIdCheck = true;
-            if(response.data.content.length > 0){
-                this.idYes = false;
-                this.idNo = true;
-                return;
-            }
-            this.idYes = true;
-        },
-        changeStatus(){
-            this.saveIdCheck = false;
-            this.idYes = false;
-            this.idNo = false;
+            await this.$store.dispatch('bs/FETCH_BOARD_CREATE',data);
         }
+        alert('글이 등록 되었습니다.');
+        this.$emit('close');
+        this.$emit('updateFetch',this.boardGbn);
+      },
+    },
+    computed: {
+        ...mapState({
+            boardInfo : state => state.bs.boardInfo,
+            loginUser: state => state.us.loginUser,
+        })
+    },
+    mounted () {
+        this.boardInfoSet = this.boardInfo;
     },
 }
 </script>
 
 <style>
-.update-input{
-  width: 150px;
-  border: 2px solid #42b983;
-  border-radius: 4px;
-}
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -207,13 +175,10 @@ export default {
   margin: 20px 0;
 }
 .create-input{
-  width: 210px;
+  width: 350px;
+  height: 60px;
   border: 2px solid #42b983;
   border-radius: 4px;
-  /* margin-left: 50px; */
-}
-.naming-style{
-    display:inline-block; width:80px;
 }
 .passCheck1{
   padding-left:51px; 
@@ -245,11 +210,5 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-.validation-alert{
-    color: red;
-}
-.passCheck{
-  color:#42b983;
 }
 </style>

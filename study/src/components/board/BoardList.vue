@@ -30,9 +30,10 @@
                                         <i class="cehckBtn far fa-check-square" style="padding-left: 5px;" 
                                         :class="{cehckBtnComp:item.checked}" @click="selectItem(item)"></i>
                                     </td>
-                                    <b-icon-search class="table-icon-style" @click="itemDetail(item.boardId)"></b-icon-search>
-                                    
-                                    <b-icon-trash class="table-icon-style" @click="itemDelete(item)"></b-icon-trash>
+                                    <td>
+                                        <b-icon-search class="table-icon-style" @click="itemDetail(item.boardId)"></b-icon-search>
+                                        <b-icon-trash class="table-icon-style" @click="itemDelete(item)"></b-icon-trash>
+                                    </td>
                                     <td class="ctd">{{item.title}}</td>
                                     <td class="ctd" v-if="item.deleteYn == 'Y'">
                                         <b-button pill variant="outline-danger">삭제됨</b-button>
@@ -60,7 +61,7 @@
             <h3 slot="header">게시글정보</h3>
         </BoardDetail>
 
-        <BoardCreate v-if="showCreate" @close="showCreate = false" @updateFetch="fetchUpdateList">
+        <BoardCreate v-if="showCreate" @close="showCreate = false" @updateFetch="fetchUpdateListTab" :boardGbn="boardType">
             <h3 slot="header">게시글등록</h3>
         </BoardCreate>
    </div>
@@ -168,11 +169,11 @@ export default {
         },
         //삭제
         async itemDelete(item){
-            if(item.deletedYn == 'N'){
-                if(confirm(`${item.userLoginId} 사용자를 삭제하시겠습니까?`)){
+            if(item.deleteYn == 'N'){
+                if(confirm(`<${item.title}> 해당 게시물을 삭제하시겠습니까?`)){
                     this.$emit('start');
-                    await this.$store.dispatch('us/FETCH_USER_DELETE',item.id);
-                    this.fetchUpdateList();
+                    await this.$store.dispatch('bs/FETCH_BOARD_DELETE',item.boardId);
+                    this.fetchUpdateList(item.boardType);
                     this.$emit('end');
                 }
             }

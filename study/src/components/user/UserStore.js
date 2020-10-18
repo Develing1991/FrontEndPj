@@ -1,19 +1,50 @@
-import {fetchUserList
+import {fetchLogin
+        ,fetchUserList
         ,fetchUserDuple
         ,fetchUserInfo
         ,fetchUserUpdate
         ,fetchUserCreate
         ,fetchUserDelete} from '@/api/index';
 
+import {saveLoginIdToCookie,
+        saveUserNameToCookie,
+        saveUserTypeToCookie,
+        saveUserKeyIdToCookie,
+        getLoginIdFromCookie,
+        getUserNameFromCookie,
+        getUserTypeFromCookie,
+        getUserKeyIdFromCookie,
+        deleteCookie,} from '@/utils/cookies.js';
 export default{
     namespaced: true,
     state:{
+        loginUser :{
+            "userLoginId" : getLoginIdFromCookie() || '',
+            "name" : getUserNameFromCookie() || '',
+            "userType" : getUserTypeFromCookie() || '',
+            "userId" : getUserKeyIdFromCookie() || '',
+        },
         userList:[],
         userInfo:{},
         pagingData:{},
         userInfoAddr:{},
     },
     mutations:{
+        SET_LOGIN_USER(state,data){
+            state.loginUser = data;
+        },
+        SET_LOGOUT(state){
+            deleteCookie('userLoginId');
+            deleteCookie('name');
+            deleteCookie('userType');
+            deleteCookie('id');
+            state.loginUser ={
+                "userLoginId" : '',
+                "name" : '',
+                "userType" : '',
+                "userId" : '',
+            };
+        },
         SET_USERLIST(state, data){
             if(data){
                 data.forEach(element => {
@@ -31,6 +62,21 @@ export default{
         }
     },
     actions:{
+        async LOGIN({commit},data){
+            try {
+                const response = await fetchLogin(data);
+                if(response.data.id>0 && (response.data.deleteYn != 'Y') ){
+                    commit('SET_LOGIN_USER', response.data);
+                    saveLoginIdToCookie(response.data.userLoginId);
+                    saveUserNameToCookie(response.data.name);
+                    saveUserTypeToCookie(response.data.userType);
+                    saveUserKeyIdToCookie(response.data.id);
+                }
+                return response;      
+            } catch (error) {
+                console.log(error);
+            }
+        },
         async FETCH_USER_LIST({commit},data){
             try {
                 const response = await fetchUserList(data);

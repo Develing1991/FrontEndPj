@@ -9,6 +9,10 @@ export const router = new VueRouter({
             redirect:'/user'
         },
         {
+            path:'/login',
+            component: ()=> import('@/views/LoginView.vue'),
+        },
+        {
             path:'/main',
             component:  ()=> import('@/views/MainView.vue'),
         },
