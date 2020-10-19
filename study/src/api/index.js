@@ -53,9 +53,28 @@ function fetchBoardDelete(id){
     return instance.delete(`/board/${id}`);
 }
 
+/**
+ * 상품
+ */
+function fetchProductList(data){ //검색 다른방식으로
+    return instance.get(`/product/list/${data.cate}?page=${data.page}&size=${data.size}&name=${data.name}`); 
+}
+function fetchProductInfo(data){
+    return instance.get(`/product/${data.cate}/${data.id}`);
+}
+function fetchProductCreate(data){
+    return instance.post(`/product/${data.cate}`,data);
+}
+function fetchProductUpdate(data){
+    return instance.post(`/product/${data.updateData.cate}/${data.id}`,data.updateData);
+}
+function fetchProductDelete(data){
+    return instance.delete(`/product/${data.cate}/${data.id}`);
+}
+
 export {
     fetchLogin,
-    
+
     fetchUserList,
     fetchUserDuple,
     fetchUserInfo,
@@ -69,4 +88,9 @@ export {
     fetchBoardUpdate,
     fetchBoardDelete,
     
+    fetchProductList,
+    fetchProductInfo,
+    fetchProductCreate,
+    fetchProductUpdate,
+    fetchProductDelete,
 }
