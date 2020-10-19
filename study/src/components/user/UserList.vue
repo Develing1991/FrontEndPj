@@ -196,7 +196,7 @@ export default {
     margin: 0px 5px 5px 5px;
 }
 .middle-style{
-    padding-left: 1200px;
+    padding-left: 990px;
 }
 .table-icon-style{
     margin: 22px 12px 0px 12px;

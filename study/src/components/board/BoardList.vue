@@ -142,6 +142,7 @@ export default {
             this.showCreate = true;
         },
         serchBoardType(type){
+            this.searchKewoard = '';
             this.boardType = type;
             this.fetchBoardList();
         },
@@ -239,7 +240,7 @@ export default {
     margin: 0px 5px 5px 5px;
 }
 .middle-style{
-    padding-left: 730px;
+    padding-left: 720px;
 }
 .table-icon-style{
     margin: 22px 12px 0px 12px;

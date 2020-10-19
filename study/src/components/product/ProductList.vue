@@ -1,5 +1,7 @@
 <template>
-  <div>main</div>
+  <div>
+      pro
+  </div>
 </template>
 
 <script>

@@ -1,0 +1,16 @@
+/*--- HEADER ---*/
+.page-header {
+    font-size: 45px;
+      font-weight: 600;
+      color: #456155;
+      padding: 30px 5px 15px;
+  }
+  .list-container {
+      padding-top: 13px;
+  }
+  .contents {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 5px;
+    width: 100%;  
+  }
