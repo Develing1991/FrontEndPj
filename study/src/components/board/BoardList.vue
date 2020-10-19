@@ -171,10 +171,8 @@ export default {
         async itemDelete(item){
             if(item.deleteYn == 'N'){
                 if(confirm(`<${item.title}> 해당 게시물을 삭제하시겠습니까?`)){
-                    this.$emit('start');
                     await this.$store.dispatch('bs/FETCH_BOARD_DELETE',item.boardId);
                     this.fetchUpdateList(item.boardType);
-                    this.$emit('end');
                 }
             }
         },
