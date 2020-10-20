@@ -106,6 +106,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import DetailMixin from '@/mixins/DetailMixin.js';
 export default {
     props:{
       // modalGbn:{
@@ -113,6 +114,7 @@ export default {
       //   required:true,
       // }
     },
+    mixins:[DetailMixin],
     watch:{
         boardInfoSet(newValue){
             this.boardInfoSet = newValue;
@@ -136,7 +138,7 @@ export default {
       
       cancelUpdate(){
         this.updatable = false;
-        //this.boardInfoSet = this.boardInfo;
+        this.boardInfoSet = this.boardInfo;
       },
       async updateBoard(){
         if(confirm('해당 게시글을 수정하시겠습니까?')){
@@ -162,7 +164,7 @@ export default {
         })
     },
     mounted () {
-        this.boardInfoSet = this.boardInfo;
+        this.boardInfoSet = this.deepCopy(this.boardInfo);
     },
 }
 </script>

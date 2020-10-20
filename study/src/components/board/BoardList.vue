@@ -173,7 +173,7 @@ export default {
             if(item.deleteYn == 'N'){
                 if(confirm(`<${item.title}> 해당 게시물을 삭제하시겠습니까?`)){
                     await this.$store.dispatch('bs/FETCH_BOARD_DELETE',item.boardId);
-                    this.fetchUpdateList(item.boardType);
+                    this.fetchUpdateListTab(item.boardType);
                 }
             }
         },
@@ -186,15 +186,15 @@ export default {
             //this.$router.push(`/userInfo/${id}`);
             
         },
-        async fetchUpdateList(bType){
-            this.$emit('start');
-            this.searchKewoard = ''
-            var data = this.getPageSet();
-            data.type = bType;
-            data.title = this.searchKewoard;
-            await this.$store.dispatch('bs/FETCH_BOARD_LIST',data);
-            this.$emit('end');
-        },
+        // async fetchUpdateList(bType){
+        //     this.$emit('start');
+        //     this.searchKewoard = ''
+        //     var data = this.getPageSet();
+        //     data.type = bType;
+        //     data.title = this.searchKewoard;
+        //     await this.$store.dispatch('bs/FETCH_BOARD_LIST',data);
+        //     this.$emit('end');
+        // },
         fetchUpdateListTab(bType){
             var changeTab = document.getElementsByTagName('li');
             switch(bType){

@@ -69,7 +69,7 @@ function fetchProductUpdate(data){
     return instance.post(`/product/${data.updateData.cate}/${data.id}`,data.updateData);
 }
 function fetchProductDelete(data){
-    return instance.delete(`/product/${data.cate}/${data.id}`);
+    return instance.delete(`/product/${data.cate}/${data.productId}`);
 }
 
 export {

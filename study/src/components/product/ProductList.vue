@@ -168,9 +168,9 @@ export default {
         //삭제
         async itemDelete(item){
             if(item.deleteYn == 'N'){
-                if(confirm(`<${item.title}> 해당 게시물을 삭제하시겠습니까?`)){
-                    await this.$store.dispatch('bs/FETCH_BOARD_DELETE',item.boardId);
-                    this.fetchUpdateList(item.productType);
+                if(confirm(`<${item.name}> 해당 품목을 삭제하시겠습니까?`)){
+                    await this.$store.dispatch('ps/FETCH_PRODUCT_DELETE',item);
+                    this.fetchUpdateListTab(item.cate);
                 }
             }
         },
@@ -187,18 +187,18 @@ export default {
             //this.$router.push(`/userInfo/${id}`);
             
         },
-        async fetchUpdateList(bType){
-            this.$emit('start');
-            this.searchKewoard = ''
-            var data = this.getPageSet();
-            data.cate = bType;
-            data.title = this.searchKewoard;
-            await this.$store.dispatch('bs/FETCH_BOARD_LIST',data);
-            this.$emit('end');
-        },
-        fetchUpdateListTab(bType){
+        // async fetchUpdateList(pType){
+        //     this.$emit('start');
+        //     this.searchKewoard = ''
+        //     var data = this.getPageSet();
+        //     data.cate = pType;
+        //     data.name = this.searchKewoard;
+        //     await this.$store.dispatch('ps/FETCH_PRODUCT_LIST',data);
+        //     this.$emit('end');
+        // },
+        fetchUpdateListTab(pType){
             var changeTab = document.getElementsByTagName('li');
-            switch(bType){
+            switch(pType){
                 case 'BOOK':
                     document.getElementById(changeTab[0].getElementsByTagName('a')[0].id).click();
                 break;

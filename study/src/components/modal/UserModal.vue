@@ -142,7 +142,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import DetailMixin from '@/mixins/DetailMixin.js';
 export default {
     props:{
       // modalGbn:{
@@ -150,6 +151,7 @@ export default {
       //   required:true,
       // }
     },
+    mixins:[DetailMixin],
     watch:{
       basicUser(newValue){
         this.basicUser = newValue;
@@ -253,8 +255,8 @@ export default {
         })
     },
     mounted () {
-        this.basicUser = this.userInfo;
-        this.basicUserAddr = this.userInfoAddr;
+        this.basicUser = this.deepCopy(this.userInfo);
+        this.basicUserAddr = this.deepCopy(this.userInfoAddr);
         this.basicBoardList = this.userInfo.boards;
         this.basicOrderList = this.userInfo.orders;
     },

@@ -28,6 +28,11 @@ mutations:{
     },
     
 },
+getters:{
+    getProductInfo(state){
+        return state.productInfo;
+    }
+},
 actions:{
     async FETCH_PRODUCT_LIST({commit},data){
         try {

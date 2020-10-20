@@ -164,7 +164,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex';
+import DetailMixin from '@/mixins/DetailMixin.js';
 export default {
     props:{
       // modalGbn:{
@@ -173,14 +174,12 @@ export default {
       // }
     },
     watch:{
-        productInfoSet(newValue){
-            this.productInfoSet = newValue;
-        }
     },
+    mixins: [DetailMixin],
     data() {
         return {
             productInfoSet:{},
-
+            old :{},
             updatable:false,
             options: [
                 { value: 'BOOK', name: '도서' },
@@ -190,9 +189,9 @@ export default {
         }
     },
     methods: {
-      
       cancelUpdate(){
         this.updatable = false;
+        this.productInfoSet = this.productInfo;
       },
       async updateBoard(){
         if(confirm('해당 게시글을 수정하시겠습니까?')){
@@ -216,19 +215,22 @@ export default {
                 data.updateData.blendingType = this.productInfoSet.blendingType;
             }
             await this.$store.dispatch('ps/FETCH_PRODUCT_UPDATE',data);
+            alert('수정되었습니다.');
+            this.$emit('close');
+            this.$emit('updateFetch',this.productInfoSet.cate);
         }
-        alert('수정되었습니다.');
-        this.$emit('close');
-        this.$emit('updateFetch',this.productInfoSet.cate);
       },
     },
     computed: {
         ...mapState({
             productInfo : state => state.ps.productInfo,
+        }),
+        ...mapGetters({
+            getProductInfo : 'ps/getProductInfo',
         })
     },
     mounted () {
-        this.productInfoSet = this.productInfo;
+        this.productInfoSet = this.deepCopy(this.productInfo);
     },
 }
 </script>
