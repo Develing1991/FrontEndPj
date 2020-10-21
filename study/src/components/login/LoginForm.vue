@@ -1,10 +1,22 @@
 <template>
   <div>
-      <div>
-          id : <input type="text" v-model="loginId">
+      <div class="contents">
+        <div class="form-wrapper form-wrapper-sm">
+            <h1 class="page-header">로그인</h1>
+            <form @submit.prevent="loginUser" class="form">
+            <div>
+                id : <input type="text" v-model="loginId">
+            </div>
+            <div>
+                pass : <input type="text" v-model="password">
+            </div>
+            <button type="submit" class="btn-common">로그인</button>
+
+            <button style="background-color: #138496; margin-left:5px;" class="btn-common">회원가입</button>
+            </form>
+        </div>
       </div>
-          pass : <input type="text" v-model="password">
-      <b-button variant="success"  @click="loginUser">로그인</b-button>
+      
   </div>
 </template>
 
@@ -23,6 +35,7 @@ export default {
                 "pass1" : this.password
             }
             this.$store.dispatch('us/LOGIN',data);
+            this.$router.push('/main');
         }
     },
 }

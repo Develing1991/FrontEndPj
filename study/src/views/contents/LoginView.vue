@@ -1,16 +1,16 @@
 <template>
   <div>
-    <TitleList :title="name"></TitleList>
+    <!-- <TitleList :title="name"></TitleList> -->
     <LoginForm></LoginForm>
   </div>
 </template>
 
 <script>
-import TitleList from '@/views/contents/TitleList';
+// import TitleList from '@/views/contents/TitleList';
 import LoginForm from '@/components/login/LoginForm';
 export default {
     components: {
-        TitleList,
+        // TitleList,
         LoginForm,
     },
     data() {

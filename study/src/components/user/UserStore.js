@@ -20,7 +20,7 @@ export default{
     state:{
         loginUser :{
             "userLoginId" : getLoginIdFromCookie() || '',
-            "name" : getUserNameFromCookie() || '',
+            "userName" : getUserNameFromCookie() || '',
             "userType" : getUserTypeFromCookie() || '',
             "userId" : getUserKeyIdFromCookie() || '',
         },
@@ -35,12 +35,12 @@ export default{
         },
         SET_LOGOUT(state){
             deleteCookie('userLoginId');
-            deleteCookie('name');
+            deleteCookie('userName');
             deleteCookie('userType');
-            deleteCookie('id');
+            deleteCookie('userId');
             state.loginUser ={
                 "userLoginId" : '',
-                "name" : '',
+                "userName" : '',
                 "userType" : '',
                 "userId" : '',
             };
