@@ -13,3 +13,11 @@ __vuex__
 [CLI][link]
 
 [link]:https://cli.vuejs.org/
+
+```bash
+$ npm i
+```
+
+```bash
+$ npm run serve
+```
