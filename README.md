@@ -15,6 +15,10 @@ __vuex__
 [link]:https://cli.vuejs.org/
 
 ```bash
+$git clone https://github.com/completedLee/FrontEndPj.git
+```
+
+```bash
 $ npm i
 ```
 
